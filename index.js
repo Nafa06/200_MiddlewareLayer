@@ -188,7 +188,7 @@ app.delete(
 
         return successResponse(
             res,
-            'Data berhasil diperbarui',
+            'Data berhasil dihapus',
             result.rows[0]
         )
     }
