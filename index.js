@@ -36,9 +36,18 @@ app.use((req, res, next) => {
 
 function successResponse(res, message, data, status = 200) {
     return res.status(status).json({
-        status: "true",
+        success: "true",
         message,
         data,
         error: null
+    })
+}
+
+function errorResponse(res, message, status, details = null) {
+    return res.status(status).json({
+        success: "false",
+        message,
+        data: null,
+        error: details
     })
 }
