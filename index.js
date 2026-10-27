@@ -1,6 +1,6 @@
 import express from "express";
 import pg from "pg";
-import Joi from "joi";
+import Joi, { allow } from "joi";
 
 const app = express();
 const port = 3000;
@@ -62,3 +62,24 @@ const biodataSchema = Joi.object({
 const idSchema = Joi.object({
     id: Joi.number().integer().positive().required(),
 });
+
+function validateBody(schema) {
+    return (req, res, next) => {
+        const { error } = schema.validate(req.body, {
+            abortEarly: false,
+            convert: true,
+            allowUnknown: false,
+        })
+        if (error) {
+            return errorResponse(
+                res, 
+                "Validation error", 
+                400, 
+                error.details.map(item => ({
+                    field: item.path.join('.'),
+                    message: item.message
+                }))
+            )
+        }
+    }
+}
