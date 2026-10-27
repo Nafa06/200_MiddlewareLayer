@@ -97,7 +97,7 @@ function validateParams(schema) {
         if (error) {
             return errorResponse(
                 res, 
-                "Validasi Input Gagal", 
+                "Parameter tidak valid", 
                 400,
                 error.details.map(item => ({
                     field: item.path.join('.'),
@@ -105,5 +105,8 @@ function validateParams(schema) {
                 }))
             )
         }
+
+        req.params = value
+        next()
     }
 }
