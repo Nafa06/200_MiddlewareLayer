@@ -65,7 +65,7 @@ const idSchema = Joi.object({
 
 function validateBody(schema) {
     return (req, res, next) => {
-        const { error } = schema.validate(req.body, {
+        const { error, value } = schema.validate(req.body, {
             abortEarly: false,
             convert: true,
             allowUnknown: false,
@@ -82,7 +82,7 @@ function validateBody(schema) {
             )
         }
 
-        req.body = value
+        req.body = value;
         next()
     }
 }
@@ -127,7 +127,7 @@ app.post(
 
         const result = await pool.query(
             'INSERT INTO biodata (nama, nim, kelas) VALUES ($1, $2, $3 $4) RETURNING *',
-            [id ?? null, nama, nim, kelas]
+            [id, nama, nim, kelas]
         )
 
         return successResponse(
@@ -141,7 +141,7 @@ app.post(
 
 app.put(
     '/biodata/:id',
-    validateIdParam(idSchema),
+    validateParams(idSchema),
     validateBody(biodataSchema.fork(
         ['nama', 'nim', 'kelas'],
         field => field.required()
@@ -171,7 +171,7 @@ app.put(
 
 app.delete(
     '/biodata/:id',
-    validateIdParam(idSchema),
+    validateParams(idSchema),
     async (req, res) => {
         const { id } = req.params
 
