@@ -155,3 +155,9 @@ app.put(
             [nama, nim, kelas, id]
         )
     }
+
+    if (result.rowCount === 0) {
+        return errorResponse(
+            res, 'Data tidak ditemukan', 404
+        )
+    }
